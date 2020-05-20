@@ -1,4 +1,7 @@
-FROM balenalib/%%RESIN_MACHINE_NAME%%-debian:stretch
+FROM balenalib/raspberry-pi-debian:stretch
+
+RUN curl http://www.linux-projects.org/listing/uv4l_repo/lpkey.asc | sudo apt-key add -
+RUN echo "deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/stretch stretch main" >> /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python-pip \
@@ -12,17 +15,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     guvcview \
     curl \
     subversion \
-    libjpeg8-dev \
+    libjpeg62-turbo-dev \
     imagemagick \
     libav-tools \
     cmake \
-    libraspberrypi-bin \
-    libraspberrypi-dev \
     ffmpeg \
     haproxy \
+    uv4l-raspicam \
+    uv4l \
+    v4l-utils \
+    vim \
     && apt-get clean \
     && rm -rf /tmp/* /var/tmp/*  \
     && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get install uv4l 
 
 # Enable haproxy
 RUN echo 'ENABLED=1' >> /etc/default/haproxy
